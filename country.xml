@@ -1,0 +1,21 @@
+<!-- https://www.w3schools.com/xml/xml_parser.asp -->
+<!-- https://developer.mozilla.org/en-US/docs/Web/Guide/Parsing_and_serializing_XML -->
+<countries>
+    <country name="India">
+        <state name="Karnata" />
+        <state name="Mumbai" />
+        <state name="Chennai" />
+        <state name="Andra pradash" />
+        <state name="Kerala" />
+    </country>
+    <country name="US">
+        <state name="California" />
+        <state name="Colorado" />
+        <state name="Arizona" />
+    </country>
+    <country name="UK">
+        <state name="Aberdeen" />
+        <state name="Belfast" />
+        <state name="Cambridgeshire" />
+    </country>
+</countries>
