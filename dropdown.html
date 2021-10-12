@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: crimson;
+        }
+
+        .container {
+            margin-top: 10%;
+            margin-left: 38%;
+            background-color: cadetblue;
+            width: 300px;
+            border-radius: 12px;
+        }
+
+        .card {
+            padding: 10px;
+            border-radius: 2px;
+            height: 300px;
+        }
+
+        .forms {
+            margin-top: 50px;
+            margin-left: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="forms">
+                <label for="">Select Country :</label><br>
+                <select style="width: 77%;height: 34px;" id="country" onchange="bindState();">
+                    <option value="0">selct country</option>
+                </select>
+            </div>
+            <div class="forms">
+                <label for="">Select State :</label><br>
+                <select style="width: 77%;height: 34px;" id="state">
+                    <option value="0">selct state</option>
+                </select>
+            </div>
+        </div>
+        <div class="forms">
+            <input style="width: 77%;height: 34px;" type="submit" value="Submit">
+        </div>
+    </div>
+    <script>
+        var countryList = null;
+
+        //Declared an object for xml request
+        const xhr = new XMLHttpRequest();
+
+        //once xml is requested from server
+        xhr.onload = function () {
+            //calling dump function to bind country name in the dropdown list
+            dump(xhr.responseXML.documentElement);
+        }
+
+        //if error from while requesting xml file
+        xhr.onerror = function () {
+            //calling dump function to log a error
+            dump("Error while getting XML.");
+        }
+
+        //Sending Request to server to read xml file
+        xhr.open("GET", "country.xml");
+        xhr.responseType = "document";
+        xhr.send();
+
+
+        function dump(doc) {
+            if (doc === "Error while getting XML.") 
+            {
+                //logging error here
+                console.log("Error while getting XML.");
+            } 
+            
+            else 
+            {
+
+                const serializer = new XMLSerializer();
+                const xmlStr = serializer.serializeToString(doc);
+
+                const parser = new DOMParser();
+                const dom = parser.parseFromString(xmlStr, "application/xml");
+                countryList = dom.documentElement;
+                if (dom != undefined && dom != null)
+                {
+                    for (i = 0; i < dom.documentElement.children.length; i++) 
+                    {
+                        let countryName = dom.documentElement.children[i].attributes[0].value;
+
+
+                        var opt = document.createElement("option");
+
+                        // Assign text and value to Option object
+                        opt.text = countryName;
+                        opt.value = countryName;
+
+                        // Adding country to the dropdown list
+                        document.getElementById('country').options.add(opt);
+                    }
+                }
+            }
+        }
+
+        function bindState() {
+            var e = document.getElementById("country");
+            var strUser = e.options[e.selectedIndex].value;
+            RemoveDropdown();
+            for (i = 0; i < countryList.children.length; i++) {
+                let countryName = countryList.children[i].attributes[0].value;
+                if (countryName === strUser) {
+                    for (j = 0; j < countryList.children[i].children.length; j++) {
+                        let stateName = countryList.children[i].children[j].attributes[0].value;
+
+                        let opt = document.createElement("option");
+
+                        // Assign text and value to Option object
+                        opt.text = stateName;
+                        opt.value = stateName;
+
+                        // Add an Option object to Drop Down List Box
+                        document.getElementById('state').options.add(opt);
+                    }
+                }
+            }
+        }
+
+        function RemoveDropdown() {
+            var select = document.getElementById("state");
+            var length = select.options.length;
+            for (i = length - 1; i >= 0; i--) {
+                select.options[i] = null;
+            }
+        }
+
+    </script>
+</body>
+
+</html>
